@@ -1,3 +1,5 @@
+** DISCONTINUED SINCE 2025 **
+
 # Dragonflight 3
 
 A comprehensive UI overhaul for World of Warcraft Vanilla 1.12.1.
