@@ -139,7 +139,7 @@ function setup:UpdateButtonStates()
             isPushed = true
         elseif data.name == 'WorldMap' and WorldMapFrame:IsVisible() then
             isPushed = true
-        elseif data.name == 'MainMenu' and (GameMenuFrame:IsVisible() or OptionsFrame:IsVisible()) then
+        elseif data.name == 'MainMenu' and (GameMenuFrame:IsVisible() or (_G.OptionsFrame and OptionsFrame:IsVisible()) or (_G.SettingsPanel and SettingsPanel:IsVisible()) or (_G.HybridSettingsPanel and HybridSettingsPanel:IsVisible())) then
             isPushed = true
         elseif data.name == 'Help' and HelpFrame:IsVisible() then
             isPushed = true

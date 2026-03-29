@@ -7,12 +7,16 @@ DF:NewDefaults('keybinds', {
 
 DF:NewModule('keybinds', 1, function()
     local skinned = false
+    local function GetKeybindingsFrame()
+        return _G.KeyBindingFrame or _G.KeyBindingsFrame or _G.KeyBindingsPanel
+    end
 
     local function SkinKeyBindingFrame()
-        if skinned or not KeyBindingFrame then return end
+        local frame = GetKeybindingsFrame()
+        if skinned or not frame then return end
         skinned = true
 
-        local regions = {KeyBindingFrame:GetRegions()}
+        local regions = {frame:GetRegions()}
         for i = 1, table.getn(regions) do
             local region = regions[i]
             if region:GetObjectType() == 'Texture' then
@@ -24,10 +28,10 @@ DF:NewModule('keybinds', 1, function()
         end
         if KeyBindingFrameCloseButton then KeyBindingFrameCloseButton:Hide() end
 
-        local customBg = DF.ui.CreatePaperDollFrame('DF_KeyBindingCustomBg', KeyBindingFrame, 384, 512, 2)
-        customBg:SetPoint('TOPLEFT', KeyBindingFrame, 'TOPLEFT', 0, -8)
-        customBg:SetPoint('BOTTOMRIGHT', KeyBindingFrame, 'BOTTOMRIGHT', -32, 10)
-        customBg:SetFrameLevel(KeyBindingFrame:GetFrameLevel() - 1)
+        local customBg = DF.ui.CreatePaperDollFrame('DF_KeyBindingCustomBg', frame, 384, 512, 2)
+        customBg:SetPoint('TOPLEFT', frame, 'TOPLEFT', 0, -8)
+        customBg:SetPoint('BOTTOMRIGHT', frame, 'BOTTOMRIGHT', -32, 10)
+        customBg:SetFrameLevel(frame:GetFrameLevel() - 1)
         customBg.Bg:SetDrawLayer('BACKGROUND', -5)
         DF.setups.keybindingBg = customBg.Bg
         if DF.profile and DF.profile.UIParent and DF.profile.UIParent.keybindingBgAlpha then
@@ -35,10 +39,10 @@ DF:NewModule('keybinds', 1, function()
         end
         if DF.profile and DF.profile.UIParent and DF.profile.UIParent.keybindingScale then
             customBg:SetScale(DF.profile.UIParent.keybindingScale)
-            KeyBindingFrame:SetScale(DF.profile.UIParent.keybindingScale)
+            frame:SetScale(DF.profile.UIParent.keybindingScale)
         end
 
-        local closeButton = DF.ui.CreateRedButton(customBg, 'close', function() HideUIPanel(KeyBindingFrame) end)
+        local closeButton = DF.ui.CreateRedButton(customBg, 'close', function() HideUIPanel(frame) end)
         closeButton:SetPoint('TOPRIGHT', customBg, 'TOPRIGHT', 0, -1)
         closeButton:SetSize(20, 20)
         closeButton:SetFrameLevel(customBg:GetFrameLevel() + 3)
@@ -49,12 +53,12 @@ DF:NewModule('keybinds', 1, function()
     local frame = CreateFrame('Frame')
     frame:RegisterEvent('ADDON_LOADED')
     frame:SetScript('OnEvent', function()
-        if arg1 == 'Blizzard_BindingUI' then
+        if arg1 == 'Blizzard_BindingUI' or GetKeybindingsFrame() then
             SkinKeyBindingFrame()
         end
     end)
 
-    if KeyBindingFrame then
+    if GetKeybindingsFrame() then
         SkinKeyBindingFrame()
     end
 

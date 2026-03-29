@@ -167,6 +167,8 @@ DF:NewModule('UIParent', 2, 'PLAYER_ENTERING_WORLD', function()
         local customBg = getglobal('DF_KeyBindingCustomBg')
         if customBg then customBg:SetScale(value) end
         if KeyBindingFrame then KeyBindingFrame:SetScale(value) end
+        if KeyBindingsFrame then KeyBindingsFrame:SetScale(value) end
+        if KeyBindingsPanel then KeyBindingsPanel:SetScale(value) end
     end
 
     callbacks.macroScale = function(value)

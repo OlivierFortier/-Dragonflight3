@@ -8,6 +8,20 @@ DF:NewDefaults('gamemenu', {
 DF:NewModule('gamemenu', 1, function()
     DF.common.KillFrame(GameMenuFrame)
 
+    local function OpenUnifiedSettings(categoryName)
+        local settingsPanel = _G.SettingsPanel or _G.HybridSettingsPanel
+        if not settingsPanel then return false end
+        ShowUIPanel(settingsPanel)
+        if categoryName then
+            if settingsPanel.OpenToCategory then
+                settingsPanel:OpenToCategory(categoryName)
+            elseif settingsPanel.SelectCategory then
+                settingsPanel:SelectCategory(categoryName)
+            end
+        end
+        return true
+    end
+
     local frame = DF.ui.CreatePaperDollFrame('DF_GameMenuFrame', UIParent, 225, 480, 3)
     frame:SetPoint('CENTER', 0, 0)
     frame:Hide()
@@ -64,14 +78,18 @@ DF:NewModule('gamemenu', 1, function()
     soundBtn:SetPoint('TOP', frame, 'TOP', -40.5, yOffset)
     soundBtn:SetScript('OnClick', function()
         frame:Hide()
-        ShowUIPanel(SoundOptionsFrame)
+        if not OpenUnifiedSettings('Sound') and SoundOptionsFrame then
+            ShowUIPanel(SoundOptionsFrame)
+        end
     end)
 
     local videoBtn = DF.ui.Button(frame, 'Video', 79, buttonHeight)
     videoBtn:SetPoint('LEFT', soundBtn, 'RIGHT', -2, 0)
     videoBtn:SetScript('OnClick', function()
         frame:Hide()
-        ShowUIPanel(OptionsFrame)
+        if not OpenUnifiedSettings('Video') and OptionsFrame then
+            ShowUIPanel(OptionsFrame)
+        end
     end)
     yOffset = yOffset - buttonHeight - buttonSpacing
 
@@ -79,7 +97,9 @@ DF:NewModule('gamemenu', 1, function()
     uiBtn:SetPoint('TOP', frame, 'TOP', 0, yOffset)
     uiBtn:SetScript('OnClick', function()
         frame:Hide()
-        ShowUIPanel(UIOptionsFrame)
+        if not OpenUnifiedSettings('Interface') and UIOptionsFrame then
+            ShowUIPanel(UIOptionsFrame)
+        end
     end)
     yOffset = yOffset - buttonHeight - buttonSpacing * emptySpacing
 
@@ -87,8 +107,15 @@ DF:NewModule('gamemenu', 1, function()
     keybindsBtn:SetPoint('TOP', frame, 'TOP', - 10, yOffset)
     keybindsBtn:SetScript('OnClick', function()
         frame:Hide()
-        KeyBindingFrame_LoadUI()
-        ShowUIPanel(KeyBindingFrame)
+        if not OpenUnifiedSettings('Key Bindings') then
+            if KeyBindingFrame_LoadUI then
+                KeyBindingFrame_LoadUI()
+            end
+            local keyBindingFrame = _G.KeyBindingFrame or _G.KeyBindingsFrame or _G.KeyBindingsPanel
+            if keyBindingFrame then
+                ShowUIPanel(keyBindingFrame)
+            end
+        end
     end)
 
     local hmBtn = DF.ui.Button(frame, '+', 21, buttonHeight, nil, {.9, 0, 0})
