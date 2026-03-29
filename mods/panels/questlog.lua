@@ -17,6 +17,7 @@ DF:NewModule('questlog', 1, function()
         end
     end
     QuestLogFrameCloseButton:Hide()
+    QuestLogFrame:SetBackdrop(nil)
 
     local customBg = DF.ui.CreatePaperDollFrame('DF_QuestLogCustomBg', QuestLogFrame, 384, 400, 1)
     customBg:SetPoint('TOPLEFT', QuestLogFrame, 'TOPLEFT', 12, -12)

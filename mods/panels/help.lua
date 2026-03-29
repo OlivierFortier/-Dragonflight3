@@ -16,6 +16,7 @@ DF:NewModule('help', 1, function()
 
     HelpFrameHeader:Hide()
     HelpFrameCloseButton:Hide()
+    HelpFrame:SetBackdrop(nil)
 
     local customBg = DF.ui.CreatePaperDollFrame('DF_HelpCustomBg', HelpFrame, 640, 512, 2)
     customBg:SetPoint('TOPLEFT', HelpFrame, 'TOPLEFT', 0, 0)

@@ -25,6 +25,7 @@ DF:NewModule('map', 1, 'PLAYER_ENTERING_WORLD',function()
     end
 
     WorldMapFrameCloseButton:Hide()
+    WorldMapFrame:SetBackdrop(nil)
 
     local customBg = DF.ui.CreatePaperDollFrame('DF_MapCustomBg', WorldMapFrame, 1024, 768, 2)
     customBg:SetPoint('TOPLEFT', WorldMapFrame, 'TOPLEFT', 0, 0)

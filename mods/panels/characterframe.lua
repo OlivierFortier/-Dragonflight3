@@ -33,6 +33,7 @@ DF:NewModule('characterframe', 1,'PLAYER_ENTERING_WORLD',function()
     CharacterFrameTab4:Hide()
     CharacterFrameTab5:Hide()
     CharacterFrameCloseButton:Hide()
+    CharacterFrame:SetBackdrop(nil)
 
     _G.PetTab_Update = function() end
 

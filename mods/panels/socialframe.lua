@@ -16,6 +16,7 @@ DF:NewModule('socialframe', 1, 'PLAYER_ENTERING_WORLD', function()
     FriendsFrameTab3:Hide()
     FriendsFrameTab4:Hide()
     FriendsFrameCloseButton:Hide()
+    FriendsFrame:SetBackdrop(nil)
 
     local customBg = DF.ui.CreatePaperDollFrame('DF_FriendsCustomBg', FriendsFrame, 384, 512, 1)
     customBg:SetPoint('TOPLEFT', FriendsFrame, 'TOPLEFT', 12, -12)
