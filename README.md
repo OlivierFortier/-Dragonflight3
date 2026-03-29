@@ -1,4 +1,4 @@
-** DISCONTINUED SINCE 2025 **
+**Small fork updated to be compatible with turtle wow version 1.18.1. Don't expect any other updates from me.**
 
 # Dragonflight 3
 
