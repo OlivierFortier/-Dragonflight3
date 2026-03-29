@@ -42,6 +42,10 @@ DF:NewModule('map', 1, 'PLAYER_ENTERING_WORLD',function()
     closeButton:SetSize(20, 20)
     closeButton:SetFrameLevel(customBg:GetFrameLevel() + 3)
 
+    DF.hooks.HookScript(WorldMapFrame, 'OnShow', function()
+        WorldMapFrame:SetBackdrop(nil)
+    end, true)
+
     tinsert(UISpecialFrames, 'DF_MapCustomBg')
 
     WorldMapFrame:ClearAllPoints()

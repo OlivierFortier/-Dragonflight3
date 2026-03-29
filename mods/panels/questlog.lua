@@ -65,6 +65,10 @@ DF:NewModule('questlog', 1, function()
     closeButton:SetSize(20, 20)
     closeButton:SetFrameLevel(customBg:GetFrameLevel() + 3)
 
+    DF.hooks.HookScript(QuestLogFrame, 'OnShow', function()
+        QuestLogFrame:SetBackdrop(nil)
+    end, true)
+
     for i = 1, 10 do
         local item = getglobal('QuestLogItem' .. i)
         if item then

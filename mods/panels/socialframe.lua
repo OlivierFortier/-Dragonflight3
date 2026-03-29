@@ -117,6 +117,10 @@ DF:NewModule('socialframe', 1, 'PLAYER_ENTERING_WORLD', function()
         FriendsFrame_Update()
     end, 60)
 
+    DF.hooks.HookScript(FriendsFrame, 'OnShow', function()
+        FriendsFrame:SetBackdrop(nil)
+    end, true)
+
     tinsert(UISpecialFrames, 'DF_FriendsCustomBg')
 
     local originalToggleFriendsFrame = _G.ToggleFriendsFrame
