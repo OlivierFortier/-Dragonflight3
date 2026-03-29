@@ -39,6 +39,10 @@ DF:NewModule('help', 1, function()
     closeButton:SetSize(20, 20)
     closeButton:SetFrameLevel(customBg:GetFrameLevel() + 3)
 
+    DF.hooks.HookScript(HelpFrame, 'OnShow', function()
+        HelpFrame:SetBackdrop(nil)
+    end, true)
+
     tinsert(UISpecialFrames, 'DF_HelpCustomBg')
 
     -- callbacks
