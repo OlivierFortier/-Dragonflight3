@@ -8,15 +8,25 @@ DF:NewDefaults('gamemenu', {
 DF:NewModule('gamemenu', 1, function()
     DF.common.KillFrame(GameMenuFrame)
 
-    local function OpenUnifiedSettings(categoryName)
+    local function TryOpenSettingsCategory(settingsPanel, categoryName)
+        if not categoryName then return true end
+        if settingsPanel.OpenToCategory then
+            local ok, result = pcall(settingsPanel.OpenToCategory, settingsPanel, categoryName)
+            return ok and result ~= false
+        elseif settingsPanel.SelectCategory then
+            local ok, result = pcall(settingsPanel.SelectCategory, settingsPanel, categoryName)
+            return ok and result ~= false
+        end
+        return false
+    end
+
+    local function OpenUnifiedSettings(categoryName, fallbackCategoryName)
         local settingsPanel = _G.SettingsPanel or _G.HybridSettingsPanel
         if not settingsPanel then return false end
         ShowUIPanel(settingsPanel)
         if categoryName then
-            if settingsPanel.OpenToCategory then
-                settingsPanel:OpenToCategory(categoryName)
-            elseif settingsPanel.SelectCategory then
-                settingsPanel:SelectCategory(categoryName)
+            if not TryOpenSettingsCategory(settingsPanel, categoryName) and fallbackCategoryName then
+                TryOpenSettingsCategory(settingsPanel, fallbackCategoryName)
             end
         end
         return true
@@ -90,10 +100,10 @@ DF:NewModule('gamemenu', 1, function()
     yOffset = yOffset - buttonHeight - buttonSpacing * emptySpacing
 
     local keybindsBtn = DF.ui.Button(frame, 'Keybinds', 140, buttonHeight)
-    keybindsBtn:SetPoint('TOP', frame, 'TOP', - 10, yOffset)
+    keybindsBtn:SetPoint('TOP', frame, 'TOP', -10, yOffset)
     keybindsBtn:SetScript('OnClick', function()
         frame:Hide()
-        if not OpenUnifiedSettings('Key Bindings') then
+        if not OpenUnifiedSettings('Key Bindings', 'Keybindings') then
             if KeyBindingFrame_LoadUI then
                 KeyBindingFrame_LoadUI()
             end
@@ -115,7 +125,7 @@ DF:NewModule('gamemenu', 1, function()
     yOffset = yOffset - buttonHeight - buttonSpacing
 
     local macrosBtn = DF.ui.Button(frame, 'Macros', 140, buttonHeight)
-    macrosBtn:SetPoint('TOP', frame, 'TOP', - 10, yOffset)
+    macrosBtn:SetPoint('TOP', frame, 'TOP', -10, yOffset)
     macrosBtn:SetScript('OnClick', function()
         frame:Hide()
         MacroFrame_LoadUI()
