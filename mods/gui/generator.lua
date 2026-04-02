@@ -11,6 +11,7 @@ DF:NewDefaults('gui-generator', {
     guibgalpha = {value = 100, metadata = {element = 'slider', category = 'General', indexInCategory = 2, description = 'Background transparency for GUI frames', min = 0, max = 100, stepSize = 5}},
     guifont = {value = 'font:PT-Sans-Narrow-Bold.ttf', metadata = {element = 'dropdown', category = 'General', indexInCategory = 3, description = 'Font used throughout the GUI', options = media.fonts}},
     guimovable = {value = true, metadata = {element = 'checkbox', category = 'General', indexInCategory = 4, description = 'Allow dragging the GUI with mouse'}},
+    guitabcolor = {value = {1, 0, 0}, metadata = {element = 'colorpicker', category = 'General', indexInCategory = 5, description = 'Color of menu tab text'}},
 })
 
 DF:NewModule('gui-generator', 3, function()
@@ -408,7 +409,13 @@ DF:NewModule('gui-generator', 3, function()
                                 local desc = DF.ui.Font(panel, 12, element.description, {.9, .9, .9}, 'LEFT')
                                 desc:SetPoint('TOPLEFT', panel, 'TOPLEFT', setup.paddingLeft + setup.optionIndent, yOffset)
 
-                                local colorpicker = DF.ui.ColorPicker(panel, DF.profile[mod][key], function(color)
+                                local profileValue = DF.profile[mod][key]
+                                if profileValue == nil then
+                                    profileValue = element.value
+                                    DF.profile[mod][key] = profileValue
+                                end
+
+                                local colorpicker = DF.ui.ColorPicker(panel, profileValue, function(color)
                                     DF:SetConfig(mod, key, color)
                                 end)
                                 colorpicker:SetPoint('TOPRIGHT', panel, 'TOPRIGHT', -setup.paddingRight, yOffset)
@@ -462,6 +469,27 @@ DF:NewModule('gui-generator', 3, function()
             guiBase.mainframe:RegisterForDrag()
         end
     end
+
+    callbacks.guitabcolor = function(value)
+        local r, g, b = value[1], value[2], value[3]
+        for i = 1, table.getn(guiBase.tabframe.tabs) do
+            local tab = guiBase.tabframe.tabs[i]
+            if tab.button and tab.button.text then
+                tab.button.text:SetTextColor(r, g, b)
+            end
+        end
+        if guiBase.subframeButtons then
+            for i = 1, table.getn(guiBase.subframeButtons) do
+                local btn = guiBase.subframeButtons[i]
+                if btn and btn.text then
+                    btn.text:SetTextColor(r, g, b)
+                end
+            end
+        end
+    end
+
+    local initTabColor = DF.profile['gui-generator'].guitabcolor or {1, 0, 0}
+    callbacks.guitabcolor(initTabColor)
 
     DF:NewCallbacks('gui-generator', callbacks)
 end)
