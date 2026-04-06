@@ -159,6 +159,7 @@ DF:NewModule('gui-base', 1, function()
     end)
 
     setup.testBtn = DF.ui.Button(setup.subframe, 'Test', 80, 20, false, {1, 0, 0})
+    setup.subframeButtons = {hoverbindBtn, stacksBtn, slashBtn}
     setup.testBtn:SetPoint('CENTER', setup.subframe, 'CENTER', 0, 0)
     setup.testBtn.testRunning = false
     setup.testBtn:SetScript('OnClick', function()

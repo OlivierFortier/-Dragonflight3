@@ -392,6 +392,21 @@ DF:NewModule('chat', 1, function()
         GameTooltip:Hide()
     end)
 
+    -- Build a reverse lookup: localized class name -> uppercase file name (e.g. "Warrior" -> "WARRIOR").
+    -- GetGuildRosterInfo/GetFriendInfo/etc. only return the localized name, but classcolors is keyed
+    -- by the file name returned by UnitClass's second value.
+    local localizedToFileName = {}
+    if LOCALIZED_CLASS_NAMES_MALE then
+        for fileName, localName in pairs(LOCALIZED_CLASS_NAMES_MALE) do
+            localizedToFileName[localName] = fileName
+        end
+    end
+    local function toClassFileName(class)
+        if not class then return nil end
+        if DF.tables.classcolors[class] then return class end  -- already a file name
+        return localizedToFileName[class] or strupper(class)   -- convert or fallback
+    end
+
     chatcolor.scanner = CreateFrame('Frame')
     chatcolor.scanner:RegisterEvent('PLAYER_ENTERING_WORLD')
     chatcolor.scanner:RegisterEvent('FRIENDLIST_UPDATE')
@@ -410,21 +425,21 @@ DF:NewModule('chat', 1, function()
             for i = 1, GetNumFriends() do
                 local name, level, class = GetFriendInfo(i)
                 if name and class then
-                    playerCache[name] = class
+                    playerCache[name] = toClassFileName(class)
                 end
             end
         elseif event == 'GUILD_ROSTER_UPDATE' then
             for i = 1, GetNumGuildMembers() do
                 local name, _, _, _, class = GetGuildRosterInfo(i)
                 if name and class then
-                    playerCache[name] = class
+                    playerCache[name] = toClassFileName(class)
                 end
             end
         elseif event == 'RAID_ROSTER_UPDATE' then
             for i = 1, GetNumRaidMembers() do
                 local name, _, _, _, class = GetRaidRosterInfo(i)
                 if name and class then
-                    playerCache[name] = class
+                    playerCache[name] = toClassFileName(class)
                 end
             end
         elseif event == 'PARTY_MEMBERS_CHANGED' then
@@ -440,7 +455,7 @@ DF:NewModule('chat', 1, function()
             for i = 1, GetNumWhoResults() do
                 local name, _, _, _, class = GetWhoInfo(i)
                 if name and class then
-                    playerCache[name] = class
+                    playerCache[name] = toClassFileName(class)
                 end
             end
         elseif event == 'PLAYER_TARGET_CHANGED' or event == 'UPDATE_MOUSEOVER_UNIT' then
